@@ -2,94 +2,365 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>甲鱼爬虫</title>
+    <title>万能网页爬虫工具</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            background: #f0f2f5;
+            color: #333;
         }
+
         .container {
+            max-width: 1000px;
+            margin: 0 auto;
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
         }
-        h1 {
-            color: #1a73e8;
+
+        header {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            padding: 30px;
             text-align: center;
         }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .input-section {
+            padding: 30px;
+            background: #f7fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .url-input {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        input[type="url"] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="url"]:focus {
+            border-color: #667eea;
+        }
+
         button {
-            background: #1a73e8;
+            background: #667eea;
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
+            padding: 15px 30px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            width: 100%;
-            margin: 20px 0;
+            font-weight: 600;
+            transition: background 0.3s;
         }
+
         button:hover {
-            background: #1557b0;
+            background: #5a67d8;
         }
+
         button:disabled {
-            background: #ccc;
+            background: #a0aec0;
             cursor: not-allowed;
         }
+
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .example-btn {
+            background: #edf2f7;
+            border: 1px solid #cbd5e0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .example-btn:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        .result-section {
+            padding: 30px;
+        }
+
         .hidden {
             display: none;
         }
-        .article {
-            background: #f8f9fa;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border-left: 4px solid #1a73e8;
-        }
-        .error {
-            background: #ffe6e6;
-            color: #d93025;
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #d93025;
-        }
+
         .loading {
             text-align: center;
-            color: #1a73e8;
+            padding: 40px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-card h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .url-display {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            word-break: break-all;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .image-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .image-item:hover {
+            transform: scale(1.05);
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .image-item p {
+            padding: 8px;
+            font-size: 12px;
+            text-align: center;
+            background: #f7fafc;
+        }
+
+        .link-list {
+            list-style: none;
+        }
+
+        .link-list li {
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .link-list li:last-child {
+            border-bottom: none;
+        }
+
+        .link-list a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .link-list a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #feb2b2;
+        }
+
+        .metadata {
+            background: #f0fff4;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #9ae6b4;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .text-content {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            line-height: 1.8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #718096;
+            font-size: 14px;
+            background: #f7fafc;
+            border-top: 1px solid #e2e8f0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔍 甲鱼网站内容监控</h1>
-        <p>点击按钮获取最新内容：</p>
+        <header>
+            <h1>🌐 万能网页爬虫工具</h1>
+            <p class="subtitle">输入任何网址，立即获取页面内容</p>
+        </header>
 
-        <button onclick="fetchData()" id="fetchBtn">开始爬取</button>
+        <div class="input-section">
+            <div class="url-input">
+                <input
+                    type="url"
+                    id="urlInput"
+                    placeholder="请输入要爬取的网址 (例如: https://example.com)"
+                    autocomplete="off"
+                >
+                <button onclick="startCrawling()" id="crawlBtn">开始爬取</button>
+            </div>
 
-        <div id="loading" class="hidden">
-            <p class="loading">正在努力爬取中... 🐢</p>
+            <div class="examples">
+                <span>快速尝试：</span>
+                <button class="example-btn" onclick="setExample('https://httpbin.org/html')">示例页面</button>
+                <button class="example-btn" onclick="setExample('https://example.com')">Example.com</button>
+                <button class="example-btn" onclick="setExample('https://httpbin.org/json')">JSON API</button>
+            </div>
         </div>
 
-        <div id="result" class="hidden">
-            <h2>爬取结果：</h2>
-            <div id="content"></div>
+        <div class="result-section">
+            <div id="loading" class="hidden">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>正在努力爬取中，请稍候...</p>
+                    <p><small>这可能需要几秒钟时间</small></p>
+                </div>
+            </div>
+
+            <div id="error" class="hidden">
+                <div class="error">
+                    <h3>❌ 爬取失败</h3>
+                    <p id="errorMsg"></p>
+                </div>
+            </div>
+
+            <div id="result" class="hidden">
+                <div class="result-card">
+                    <h3>🔗 目标网址</h3>
+                    <div class="url-display" id="targetUrl"></div>
+
+                    <h3>📝 页面信息</h3>
+                    <p><strong>标题：</strong><span id="pageTitle"></span></p>
+                    <p><strong>描述：</strong><span id="pageDescription"></span></p>
+
+                    <h3>📊 元数据</h3>
+                    <div class="metadata" id="pageMetadata"></div>
+                </div>
+
+                <div class="result-card">
+                    <h3>🖼️ 图片 (最多显示10张)</h3>
+                    <div class="image-grid" id="imagesContainer"></div>
+                </div>
+
+                <div class="result-card">
+                    <h3>🔗 链接 (最多显示15个)</h3>
+                    <ul class="link-list" id="linksContainer"></ul>
+                </div>
+
+                <div class="result-card">
+                    <h3>📄 文本内容</h3>
+                    <div class="text-content" id="textContent"></div>
+                </div>
+            </div>
         </div>
 
-        <div id="error" class="hidden">
-            <p class="error" id="errorMsg"></p>
-        </div>
+        <footer>
+            <p>⚠️ 仅用于教育目的，请遵守目标网站的 robots.txt 和使用条款</p>
+            <p>🕒 最后更新时间: <span id="timestamp"></span></p>
+        </footer>
     </div>
 
     <script>
-        // 简单的JavaScript - 直接写在script标签里
-        async function fetchData() {
-            const btn = document.getElementById('fetchBtn');
+        // 设置时间戳
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        // 设置示例网址
+        function setExample(url) {
+            document.getElementById('urlInput').value = url;
+            startCrawling();
+        }
+
+        // 支持回车键触发
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startCrawling();
+            }
+        });
+
+        async function startCrawling() {
+            const url = document.getElementById('urlInput').value.trim();
+            const btn = document.getElementById('crawlBtn');
             const loading = document.getElementById('loading');
             const result = document.getElementById('result');
             const error = document.getElementById('error');
+
+            if (!url) {
+                alert('请输入要爬取的网址');
+                return;
+            }
 
             // 显示加载中
             btn.disabled = true;
@@ -98,20 +369,21 @@
             error.classList.add('hidden');
 
             try {
-                console.log('开始调用API...');
-                const response = await fetch('/api/crawl');
+                console.log('开始爬取:', url);
+                const apiUrl = `/api/crawl?url=${encodeURIComponent(url)}`;
+                const response = await fetch(apiUrl);
                 const data = await response.json();
-                console.log('API返回:', data);
+                console.log('爬取结果:', data);
 
                 if (data.status === 'success') {
-                    showResults(data);
+                    displayResults(data);
                     result.classList.remove('hidden');
                 } else {
                     throw new Error(data.message);
                 }
-            } catch (error) {
-                console.error('出错:', error);
-                showError(error.message);
+            } catch (err) {
+                console.error('爬取错误:', err);
+                showError(err.message);
                 error.classList.remove('hidden');
             } finally {
                 loading.classList.add('hidden');
@@ -119,33 +391,55 @@
             }
         }
 
-        function showResults(data) {
-            const contentDiv = document.getElementById('content');
-            let html = `
-                <h3>网站标题: ${data.title}</h3>
-                <p>爬取地址: <a href="${data.url}" target="_blank">${data.url}</a></p>
-                <hr>
-                <h3>找到的内容 (${data.articles.length}条):</h3>
+        function displayResults(data) {
+            // 显示基本信息
+            document.getElementById('targetUrl').textContent = data.url;
+            document.getElementById('pageTitle').textContent = data.title;
+            document.getElementById('pageDescription').textContent = data.description;
+
+            // 显示元数据
+            const metadata = data.metadata || {};
+            document.getElementById('pageMetadata').innerHTML = `
+                状态码: ${metadata.status_code || 'N/A'}<br>
+                内容类型: ${metadata.content_type || 'N/A'}<br>
+                编码: ${metadata.encoding || 'N/A'}
             `;
 
-            if (data.articles.length > 0) {
-                data.articles.forEach(item => {
-                    html += `<div class="article">${item.title}</div>`;
-                });
+            // 显示图片
+            const imagesContainer = document.getElementById('imagesContainer');
+            if (data.images && data.images.length > 0) {
+                imagesContainer.innerHTML = data.images.map(img => `
+                    <div class="image-item">
+                        <img src="${img.src}" alt="${img.alt}" onerror="this.style.display='none'">
+                        <p>${img.alt || '无描述'}</p>
+                    </div>
+                `).join('');
             } else {
-                html += '<p>没有找到内容</p>';
+                imagesContainer.innerHTML = '<p>未找到图片</p>';
             }
 
-            html += `<p><small>最后更新时间: ${new Date().toLocaleString()}</small></p>`;
-            contentDiv.innerHTML = html;
+            // 显示链接
+            const linksContainer = document.getElementById('linksContainer');
+            if (data.links && data.links.length > 0) {
+                linksContainer.innerHTML = data.links.map(link => `
+                    <li>
+                        <a href="${link.url}" target="_blank" rel="noopener">${link.text}</a>
+                    </li>
+                `).join('');
+            } else {
+                linksContainer.innerHTML = '<p>未找到链接</p>';
+            }
+
+            // 显示文本内容
+            document.getElementById('textContent').textContent = data.text_content || '无文本内容';
         }
 
         function showError(message) {
-            document.getElementById('errorMsg').textContent = `错误: ${message}`;
+            document.getElementById('errorMsg').textContent = message;
         }
 
-        // 页面加载完成后的一些提示
-        console.log('页面加载完成！点击按钮开始爬取');
+        // 初始提示
+        console.log('万能爬虫工具已就绪！');
     </script>
 </body>
 </html>
