@@ -2,22 +2,22 @@
   "version": 2,
   "builds": [
     {
-      "src": "backend.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
     },
     {
-      "src": "frontend/**",
+      "src": "*.html",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/backend.py"
+      "dest": "/api/index.py"
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/$1"
+      "dest": "/$1"
     }
   ]
 }

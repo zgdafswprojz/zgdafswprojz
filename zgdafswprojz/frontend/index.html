@@ -3,442 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>短信接收器 - 前端</title>
+    <title>私人网站，误输入者请退出</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
+        }
+
+        /* 登录表单样式 */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 30px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             text-align: center;
         }
 
-        h1 {
-            margin-bottom: 10px;
-            font-size: 2.5em;
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
         }
 
-        .controls {
-            padding: 20px;
-            background: #f8f9fa;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
+        .login-container p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
         }
 
-        button {
-            padding: 10px 20px;
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background: #3498db;
+            color: white;
             border: none;
             border-radius: 8px;
-            background: #007bff;
-            color: white;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
         }
 
-        button:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        button:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .stats {
-            margin-left: auto;
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .messages-container {
-            padding: 20px;
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
-        .message-card {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .message-card:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
-        }
-
-        .message-card.has-code {
-            border-left: 4px solid #28a745;
-            background: #f8fff9;
-        }
-
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .sender {
-            font-weight: bold;
-            color: #495057;
-        }
-
-        .timestamp {
-            font-size: 0.8em;
-            color: #6c757d;
-        }
-
-        .message-content {
-            color: #495057;
-            line-height: 1.5;
-            margin-bottom: 10px;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .verification-code {
-            background: #d4edda;
-            padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .code {
-            font-family: 'Courier New', monospace;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #155724;
-        }
-
-        .config-panel {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 20px 0;
-        }
-
-        .config-input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin: 5px 0;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #6c757d;
+        .login-button:hover {
+            background: #2980b9;
         }
 
         .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
+            color: #e74c3c;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* 主内容区域 - 默认隐藏 */
+        .main-content {
+            display: none;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .card-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+
+        .card-content h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .card-content p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .card-button {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .card-button:hover {
+            background: #2980b9;
+        }
+
+        .sms-image {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        }
+
+        .notes-image {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        }
+
+        .files-image {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .tasks-image {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: white;
+            opacity: 0.7;
+            padding: 20px;
+        }
+
+        .logout-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background: rgba(255,255,255,0.3);
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
+            .services-grid {
+                grid-template-columns: 1fr;
             }
 
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
+            header h1 {
+                font-size: 2.2em;
             }
 
-            .stats {
-                margin-left: 0;
-                text-align: center;
-            }
-
-            .message-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
+            .logout-button {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin: 20px auto;
+                display: block;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>📱 短信接收器</h1>
-            <p>前后端分离版本 - 安全可靠的短信转发服务</p>
-        </header>
+    <!-- 登录表单 -->
+    <div class="login-container" id="loginContainer">
+        <h2>🔐 个人服务中心(私人网站，无关者请退出)</h2>
+        <p>请输入访问密码</p>
+        <form id="loginForm">
+            <input type="password" id="password" placeholder="请输入访问密码" required>
+            <button type="submit" class="login-button">进入系统</button>
+            <div class="error-message" id="errorMessage">密码错误，请重试</div>
+        </form>
+    </div>
 
-        <div class="config-panel">
-            <h3>🔧 配置设置</h3>
-            <div>
-                <label>后端API地址:</label>
-                <input type="text" id="apiUrl" class="config-input"
-                       placeholder="http://localhost:5000" value="http://localhost:5000">
-            </div>
-            <div>
-                <label>访问令牌 (可选):</label>
-                <input type="password" id="apiToken" class="config-input"
-                       placeholder="输入API令牌">
-            </div>
-            <button onclick="saveConfig()">保存配置</button>
-        </div>
+    <!-- 主内容区域 -->
+    <div class="main-content" id="mainContent">
+        <button class="logout-button" onclick="logout()">退出登录</button>
 
-        <div class="controls">
-            <button onclick="loadMessages()">🔄 刷新消息</button>
-            <button onclick="getLatestMessage()">✨ 获取最新</button>
-            <button onclick="toggleAutoRefresh()">
-                <span id="autoRefreshText">⏹️ 自动刷新: 关</span>
-            </button>
-            <button onclick="clearMessages()" style="background: #dc3545;">🗑️ 清空消息</button>
-            <div class="stats">
-                <span id="messageCount">消息数量: 0</span>
-                <span id="lastUpdate"> | 最后更新: -</span>
-            </div>
-        </div>
+        <div class="container">
+            <header>
+                <h1>我的个人服务</h1>
+                <p>一站式管理您的日常需求</p>
+            </header>
 
-        <div id="errorContainer"></div>
+            <div class="services-grid">
+                <div class="service-card" onclick="location.href='sms.html'">
+                    <div class="card-image sms-image"></div>
+                    <div class="card-content">
+                        <h3>📱 短信接收器</h3>
+                        <p>安全地接收和查看手机短信验证码，方便您在电脑端登录各种账号。</p>
+                        <a href="sms.html" class="card-button">进入服务</a>
+                    </div>
+                </div>
 
-        <div class="messages-container" id="messagesContainer">
-            <div class="empty-state">
-                <p>📭 还没有收到短信</p>
-                <p>点击"刷新消息"按钮加载数据</p>
+                <div class="service-card">
+                    <div class="card-image notes-image"></div>
+                    <div class="card-content">
+                        <h3>📝 个人笔记</h3>
+                        <p>随时随地记录您的想法、灵感和待办事项，支持多设备同步。</p>
+                        <a href="#" class="card-button">即将推出</a>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="card-image files-image"></div>
+                    <div class="card-content">
+                        <h3>📁 文件管理</h3>
+                        <p>安全存储和管理您的个人文件，支持在线预览和快速分享。</p>
+                        <a href="#" class="card-button">即将推出</a>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="card-image tasks-image"></div>
+                    <div class="card-content">
+                        <h3>✅ 任务管理</h3>
+                        <p>高效管理您的日常任务和项目进度，提高工作和学习效率。</p>
+                        <a href="#" class="card-button">即将推出</a>
+                    </div>
+                </div>
             </div>
+
+            <footer>
+                <p>&copy; 2023 我的个人服务 | 安全 · 便捷 · 高效</p>
+            </footer>
         </div>
     </div>
 
     <script>
-        // 配置管理
-        const CONFIG_KEY = 'sms_receiver_config';
-        let config = {
-            apiUrl: 'http://localhost:5000',
-            apiToken: ''
-        };
+        // 密码设置 - 请修改为您自己的密码
+        const CORRECT_PASSWORD = "123456"; // 默认密码，请务必修改
 
-        let autoRefreshInterval = null;
-
-        // 初始化
-        function init() {
-            loadConfig();
-            updateDisplay();
-        }
-
-        function loadConfig() {
-            const saved = localStorage.getItem(CONFIG_KEY);
-            if (saved) {
-                config = {...config, ...JSON.parse(saved)};
-            }
-            document.getElementById('apiUrl').value = config.apiUrl;
-            document.getElementById('apiToken').value = config.apiToken;
-        }
-
-        function saveConfig() {
-            config.apiUrl = document.getElementById('apiUrl').value;
-            config.apiToken = document.getElementById('apiToken').value;
-            localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
-            showMessage('配置已保存', 'success');
-        }
-
-        // API 调用
-        async function apiCall(endpoint, options = {}) {
-            const url = `${config.apiUrl}${endpoint}`;
-            const headers = {
-                'Content-Type': 'application/json',
-                ...options.headers
-            };
-
-            if (config.apiToken) {
-                headers['Authorization'] = `Bearer ${config.apiToken}`;
-            }
-
-            try {
-                const response = await fetch(url, {
-                    headers,
-                    ...options
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-
-                return await response.json();
-            } catch (error) {
-                showError(`API调用失败: ${error.message}`);
-                throw error;
+        // 检查是否已经登录
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (isLoggedIn === 'true') {
+                showMainContent();
             }
         }
 
-        // 消息管理
-        async function loadMessages() {
-            try {
-                const data = await apiCall('/api/messages');
-                displayMessages(data.messages);
-                updateStats(data.total);
-            } catch (error) {
-                // 错误已经在apiCall中处理
-            }
+        // 显示主内容
+        function showMainContent() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
         }
 
-        async function getLatestMessage() {
-            try {
-                const message = await apiCall('/api/messages/latest');
-                displayMessages([message]);
-                updateStats('最新消息已加载');
-            } catch (error) {
-                if (error.message.includes('404')) {
-                    showMessage('没有新消息', 'info');
-                }
-            }
-        }
+        // 处理登录表单提交
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
 
-        async function clearMessages() {
-            if (!confirm('确定要清空所有消息吗？此操作不可撤销。')) {
-                return;
-            }
-
-            try {
-                await apiCall('/api/messages/clear', { method: 'DELETE' });
-                displayMessages([]);
-                updateStats(0);
-                showMessage('消息已清空', 'success');
-            } catch (error) {
-                // 错误处理
-            }
-        }
-
-        // 界面更新
-        function displayMessages(messages) {
-            const container = document.getElementById('messagesContainer');
-
-            if (!messages || messages.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <p>📭 还没有收到短信</p>
-                        <p>请确保后端服务正常运行且已配置正确的API地址</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = messages.map(msg => `
-                <div class="message-card ${msg.verification_code ? 'has-code' : ''}">
-                    <div class="message-header">
-                        <span class="sender">${escapeHtml(msg.sender)}</span>
-                        <span class="timestamp">${formatTime(msg.timestamp)}</span>
-                    </div>
-                    <div class="message-content">${escapeHtml(msg.content)}</div>
-                    ${msg.verification_code ? `
-                    <div class="verification-code">
-                        <strong>验证码: </strong>
-                        <span class="code">${msg.verification_code}</span>
-                        <button onclick="copyToClipboard('${msg.verification_code}')">复制</button>
-                    </div>
-                    ` : ''}
-                </div>
-            `).join('');
-        }
-
-        function updateStats(count) {
-            document.getElementById('messageCount').textContent = `消息数量: ${count}`;
-            document.getElementById('lastUpdate').textContent = ` | 最后更新: ${new Date().toLocaleTimeString()}`;
-        }
-
-        // 工具函数
-        function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-        function formatTime(timestamp) {
-            const date = new Date(timestamp);
-            return date.toLocaleString('zh-CN');
-        }
-
-        async function copyToClipboard(text) {
-            try {
-                await navigator.clipboard.writeText(text);
-                showMessage(`验证码已复制: ${text}`, 'success');
-            } catch (error) {
-                showError('复制失败，请手动选择复制');
-            }
-        }
-
-        function toggleAutoRefresh() {
-            const button = document.getElementById('autoRefreshText');
-            if (autoRefreshInterval) {
-                clearInterval(autoRefreshInterval);
-                autoRefreshInterval = null;
-                button.textContent = '⏹️ 自动刷新: 关';
+            if (password === CORRECT_PASSWORD) {
+                // 登录成功
+                localStorage.setItem('isLoggedIn', 'true');
+                showMainContent();
             } else {
-                autoRefreshInterval = setInterval(loadMessages, 10000); // 10秒刷新
-                button.textContent = '🔄 自动刷新: 开';
-                loadMessages(); // 立即加载一次
+                // 登录失败
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
             }
+        });
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
         }
 
-        function showMessage(message, type = 'info') {
-            const container = document.getElementById('errorContainer');
-            const bgColor = type === 'error' ? '#f8d7da' : type === 'success' ? '#d4edda' : '#fff3cd';
-            const color = type === 'error' ? '#721c24' : type === 'success' ? '#155724' : '#856404';
-
-            container.innerHTML = `
-                <div class="error-message" style="background: ${bgColor}; color: ${color};">
-                    ${message}
-                </div>
-            `;
-
-            if (type !== 'error') {
-                setTimeout(() => {
-                    container.innerHTML = '';
-                }, 3000);
-            }
-        }
-
-        function showError(message) {
-            showMessage(message, 'error');
-        }
-
-        // 启动
-        document.addEventListener('DOMContentLoaded', init);
+        // 页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
     </script>
 </body>
 </html>
