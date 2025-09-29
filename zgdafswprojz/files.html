@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文件管理 - 我的个人服务</title>
+    <title>文件管理</title>
     <style>
         * {
             margin: 0;
@@ -59,8 +59,37 @@
             color: #4facfe;
         }
 
+        .tab-container {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid #007bff;
+            background: white;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .alist-container {
-            height: 800px;
+            height: 700px;
             border: none;
             border-radius: 0;
             width: 100%;
@@ -82,6 +111,32 @@
             text-align: center;
         }
 
+        .login-form {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -90,7 +145,15 @@
             }
 
             .alist-container {
-                height: 600px;
+                height: 500px;
+            }
+
+            .tab-container {
+                flex-direction: column;
+            }
+
+            .tab {
+                text-align: center;
             }
         }
     </style>
@@ -105,23 +168,79 @@
             <a href="index.html" class="back-button">← 返回主页</a>
         </header>
 
-        <div id="loading" class="loading-message">
-            <p>正在加载文件管理器，请稍候...</p>
+        <div class="tab-container">
+            <div class="tab active" onclick="switchTab('alist')">文件管理器</div>
+            <div class="tab" onclick="switchTab('help')">使用帮助</div>
         </div>
 
-        <div id="errorContainer" style="display: none;"></div>
+        <div id="alist-tab" class="tab-content active">
+            <div id="loading" class="loading-message">
+                <p>正在加载文件管理器，请稍候...</p>
+            </div>
 
-        <iframe
-            id="alistFrame"
-            class="alist-container"
-            src="https://alist.crystelf.top"
-            onload="hideLoading()"
-            onerror="showError()"
-            title="文件管理器">
-        </iframe>
+            <div id="errorContainer" style="display: none;"></div>
+
+            <iframe
+                id="alistFrame"
+                class="alist-container"
+                src="https://alist.crystelf.top"
+                onload="hideLoading()"
+                onerror="showError()"
+                title="文件管理器">
+            </iframe>
+        </div>
+
+        <div id="help-tab" class="tab-content">
+            <div style="padding: 20px;">
+                <h2>文件管理器使用说明</h2>
+                <p>这是一个集成的文件管理器，您可以在本页面内直接管理您的云存储文件。</p>
+
+                <h3>主要功能：</h3>
+                <ul style="margin: 15px 0 15px 20px;">
+                    <li>浏览和搜索文件</li>
+                    <li>上传新文件</li>
+                    <li>下载文件到本地</li>
+                    <li>创建和管理文件夹</li>
+                    <li>分享文件链接</li>
+                </ul>
+
+                <h3>常见问题：</h3>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <p><strong>Q: 为什么无法加载文件管理器？</strong></p>
+                    <p>A: 可能是网络连接问题或Alist服务暂时不可用。请尝试重新加载或稍后再试。</p>
+
+                    <p><strong>Q: 如何上传文件？</strong></p>
+                    <p>A: 在文件管理器中，点击"上传"按钮，然后选择要上传的文件。</p>
+
+                    <p><strong>Q: 如何下载文件？</strong></p>
+                    <p>A: 选中文件后，点击"下载"按钮即可下载到本地。</p>
+                </div>
+
+                <p>如需更多帮助，请联系系统管理员。</p>
+            </div>
+        </div>
     </div>
 
     <script>
+        // 切换标签页
+        function switchTab(tabName) {
+            // 隐藏所有标签内容
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // 移除所有标签的活动状态
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // 显示选中的标签内容
+            document.getElementById(tabName + '-tab').classList.add('active');
+
+            // 设置选中的标签为活动状态
+            event.target.classList.add('active');
+        }
+
         // 隐藏加载提示
         function hideLoading() {
             document.getElementById('loading').style.display = 'none';
@@ -159,19 +278,6 @@
         function openInNewTab() {
             window.open('https://alist.crystelf.top', '_blank');
         }
-
-        // 设置iframe自动调整高度（如果允许跨域）
-        function adjustIframeHeight() {
-            const iframe = document.getElementById('alistFrame');
-            try {
-                iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
-            } catch (e) {
-                // 跨域限制，无法访问iframe内部文档
-            }
-        }
-
-        // 定期调整iframe高度
-        setInterval(adjustIframeHeight, 1000);
     </script>
 </body>
 </html>
