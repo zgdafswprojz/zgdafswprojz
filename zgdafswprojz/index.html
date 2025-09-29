@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>私人网站，误输入者请退出</title>
+    <title>个人服务中心</title>
     <style>
         * {
             margin: 0;
@@ -172,6 +172,10 @@
             background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
         }
 
+        .alist-image {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
         footer {
             text-align: center;
             margin-top: 60px;
@@ -219,7 +223,7 @@
 <body>
     <!-- 登录表单 -->
     <div class="login-container" id="loginContainer">
-        <h2>🔐 个人服务中心(私人网站，无关者请退出)</h2>
+        <h2>🔐 个人服务中心</h2>
         <p>请输入访问密码</p>
         <form id="loginForm">
             <input type="password" id="password" placeholder="请输入访问密码" required>
@@ -248,20 +252,20 @@
                     </div>
                 </div>
 
+                <div class="service-card" onclick="window.open('https://alist.crystelf.top/', '_blank')">
+                    <div class="card-image alist-image"></div>
+                    <div class="card-content">
+                        <h3>☁️ 云存储管理</h3>
+                        <p>访问个人云存储空间，管理和分享您的文件，支持多种存储服务。</p>
+                        <a href="https://alist.crystelf.top/" target="_blank" class="card-button">进入服务</a>
+                    </div>
+                </div>
+
                 <div class="service-card">
                     <div class="card-image notes-image"></div>
                     <div class="card-content">
                         <h3>📝 个人笔记</h3>
                         <p>随时随地记录您的想法、灵感和待办事项，支持多设备同步。</p>
-                        <a href="#" class="card-button">即将推出</a>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="card-image files-image"></div>
-                    <div class="card-content">
-                        <h3>📁 文件管理</h3>
-                        <p>安全存储和管理您的个人文件，支持在线预览和快速分享。</p>
                         <a href="#" class="card-button">即将推出</a>
                     </div>
                 </div>
@@ -277,7 +281,7 @@
             </div>
 
             <footer>
-                <p>&copy; 2025 我的个人服务 | 安全 · 便捷 · 高效</p>
+                <p>&copy; 2023 我的个人服务 | 安全 · 便捷 · 高效</p>
             </footer>
         </div>
     </div>
