@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件管理 - 我的个人服务</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: white;
+            color: #4facfe;
+        }
+
+        .alist-container {
+            height: 800px;
+            border: none;
+            border-radius: 0;
+            width: 100%;
+        }
+
+        .loading-message {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .alist-container {
+                height: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>📁 文件管理</h1>
+                <p>管理您的云存储文件，支持上传、下载和分享</p>
+            </div>
+            <a href="index.html" class="back-button">← 返回主页</a>
+        </header>
+
+        <div id="loading" class="loading-message">
+            <p>正在加载文件管理器，请稍候...</p>
+        </div>
+
+        <div id="errorContainer" style="display: none;"></div>
+
+        <iframe
+            id="alistFrame"
+            class="alist-container"
+            src="https://alist.crystelf.top"
+            onload="hideLoading()"
+            onerror="showError()"
+            title="文件管理器">
+        </iframe>
+    </div>
+
+    <script>
+        // 隐藏加载提示
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // 显示错误信息
+        function showError() {
+            document.getElementById('loading').style.display = 'none';
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.style.display = 'block';
+            errorContainer.innerHTML = `
+                <div class="error-message">
+                    <h3>⚠️ 无法加载文件管理器</h3>
+                    <p>可能的原因：</p>
+                    <ul style="text-align: left; margin: 15px 0;">
+                        <li>网络连接问题</li>
+                        <li>Alist服务暂时不可用</li>
+                        <li>浏览器阻止了iframe加载</li>
+                    </ul>
+                    <p>您可以尝试：</p>
+                    <button onclick="reloadFrame()" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; margin: 5px;">重新加载</button>
+                    <button onclick="openInNewTab()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; margin: 5px;">在新标签页中打开</button>
+                </div>
+            `;
+        }
+
+        // 重新加载iframe
+        function reloadFrame() {
+            document.getElementById('errorContainer').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('alistFrame').src = document.getElementById('alistFrame').src;
+        }
+
+        // 在新标签页中打开Alist
+        function openInNewTab() {
+            window.open('https://alist.crystelf.top', '_blank');
+        }
+
+        // 设置iframe自动调整高度（如果允许跨域）
+        function adjustIframeHeight() {
+            const iframe = document.getElementById('alistFrame');
+            try {
+                iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+            } catch (e) {
+                // 跨域限制，无法访问iframe内部文档
+            }
+        }
+
+        // 定期调整iframe高度
+        setInterval(adjustIframeHeight, 1000);
+    </script>
+</body>
+</html>
